@@ -9,9 +9,6 @@ import {
   FlaskConical,
   Building2,
   AlertTriangle,
-  Activity,
-  Clock,
-  FileText,
   Edit3,
   X,
 } from 'lucide-react';

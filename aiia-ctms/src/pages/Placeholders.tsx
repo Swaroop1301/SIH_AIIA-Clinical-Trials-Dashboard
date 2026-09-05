@@ -1,14 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import {
-  Users,
-  Calendar,
-  AlertTriangle,
-  ShieldCheck,
-  FileText,
-  ClipboardList,
-  BarChart3,
-  Construction,
-} from 'lucide-react';
+import { BarChart3, Construction } from 'lucide-react';
 
 interface PlaceholderPageProps {
   title: string;
@@ -41,39 +32,6 @@ function PlaceholderPage({ title, description, icon: Icon, owner }: PlaceholderP
         </p>
       </div>
     </div>
-  );
-}
-
-export function Ethics() {
-  return (
-    <PlaceholderPage
-      title="Ethics & Compliance"
-      description="Ethics submissions, regulatory tracking, and CTRI compliance"
-      icon={ShieldCheck}
-      owner="Meet (Compliance & Governance Backend Developer)"
-    />
-  );
-}
-
-export function Documents() {
-  return (
-    <PlaceholderPage
-      title="Document Management"
-      description="Versioned document storage with strict audit trail"
-      icon={FileText}
-      owner="Meet (Compliance & Governance Backend Developer)"
-    />
-  );
-}
-
-export function AuditTrail() {
-  return (
-    <PlaceholderPage
-      title="Audit Trail"
-      description="Immutable audit log of all system actions"
-      icon={ClipboardList}
-      owner="Meet (Compliance & Governance Backend Developer)"
-    />
   );
 }
 

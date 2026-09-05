@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bell, Search, User, ChevronRight, LogOut, Settings, ChevronDown, X } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { trials, sites, recentActivity } from '@/data/mockData';
+import { trials, sites } from '@/data/mockData';
 
 const breadcrumbMap: Record<string, string> = {
   '/app': 'Dashboard',

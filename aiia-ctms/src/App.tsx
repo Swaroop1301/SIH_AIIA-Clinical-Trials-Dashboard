@@ -10,12 +10,10 @@ import Participants from '@/pages/Participants';
 import ParticipantDetail from '@/pages/ParticipantDetail';
 import Visits from '@/pages/Visits';
 import AdverseEvents from '@/pages/AdverseEvents';
-import {
-  Ethics,
-  Documents,
-  AuditTrail,
-  Reports,
-} from '@/pages/Placeholders';
+import Ethics from '@/pages/Ethics';
+import Documents from '@/pages/Documents';
+import AuditTrail from '@/pages/AuditTrail';
+import { Reports } from '@/pages/Placeholders';
 
 function App() {
   return (
@@ -46,7 +44,7 @@ function App() {
         <Route path="/trials/:id" element={<Navigate to={`/app/trials`} replace />} />
         <Route path="/sites" element={<Navigate to="/app/sites" replace />} />
         <Route path="/sites/:id" element={<Navigate to={`/app/sites`} replace />} />
-        
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
