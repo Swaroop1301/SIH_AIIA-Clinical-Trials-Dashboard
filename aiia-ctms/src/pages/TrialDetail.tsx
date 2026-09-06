@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -19,7 +19,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { trials, sites as allSites } from '@/data/mockData';
+import { sites as allSites } from '@/data/mockData';
+import { api } from '@/services/api';
 
 const statusStyles: Record<string, { text: string; bg: string }> = {
   Active: { text: 'text-emerald-700', bg: 'bg-emerald-50' },
@@ -50,8 +51,40 @@ const trialEnrollmentData = [
 export default function TrialDetail() {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState('Overview');
+  const [trial, setTrial] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const trial = trials.find((t) => t.id === id);
+  useEffect(() => {
+    async function fetchTrial() {
+      try {
+        const res = await api.get(`/trials/${id}`);
+        // Add fallback mock values for UI
+        setTrial({
+          ...res.data,
+          title: res.data.name,
+          participants: 0,
+          targetEnrollment: 100,
+          sites: 0,
+          phase: 'Phase II',
+          pi: 'Unassigned',
+          sponsor: 'AIIA',
+          therapeuticArea: 'General',
+          startDate: '2025-01-01',
+          endDate: '2026-01-01',
+          protocol: 'AIIA-001'
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTrial();
+  }, [id]);
+
+  if (loading) {
+    return <div className="p-8 text-center text-gray-500">Loading trial...</div>;
+  }
 
   if (!trial) {
     return (

@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from app.api.routes import auth, trials, participants, dashboard
+from app.api.routes import auth, trials, participants, dashboard, sites
 from app.database import engine, Base
 
 # Create database tables (For local SQLite development. Use Alembic in production)
@@ -32,6 +32,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(trials.router, prefix="/api/trials", tags=["trials"])
 app.include_router(participants.router, prefix="/api/participants", tags=["participants"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
+app.include_router(sites.router, prefix="/api/sites", tags=["sites"])
 
 @app.get("/")
 @limiter.limit("10/minute")

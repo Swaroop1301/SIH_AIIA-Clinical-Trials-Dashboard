@@ -1,17 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Plus, MapPin, ChevronRight } from 'lucide-react';
-import { sites } from '@/data/mockData';
+import { api } from '@/services/api';
 
 export default function Sites() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('All');
+  const [sites, setSites] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchSites() {
+      try {
+        const res = await api.get('/sites');
+        setSites(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchSites();
+  }, []);
 
   const filteredSites = sites.filter((site) => {
     const matchesSearch =
-      site.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      site.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      site.pi.toLowerCase().includes(searchQuery.toLowerCase());
+      site.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      site.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      site.pi?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'All' || site.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
