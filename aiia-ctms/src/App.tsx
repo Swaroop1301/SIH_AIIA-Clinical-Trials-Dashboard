@@ -15,6 +15,7 @@ import {
   AuditTrail,
   Reports,
 } from '@/pages/Placeholders';
+import Login from '@/pages/Login';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         {/* Public Landing Page */}
         <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
 
         {/* Protected/App Routes */}
         <Route path="/app" element={<MainLayout />}>

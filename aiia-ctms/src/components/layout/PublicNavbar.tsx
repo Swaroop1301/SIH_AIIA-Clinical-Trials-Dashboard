@@ -44,11 +44,11 @@ export default function PublicNavbar() {
         </a>
         <div className="desktop-nav">{navItems.map((item) => navLink(item))}</div>
         <div className="nav-actions">
-          <Link to="/app" className="portal-link">CTMS portal <ArrowUpRight aria-hidden="true" size={15} /></Link>
+          <Link to="/login" className="portal-link">CTMS portal <ArrowUpRight aria-hidden="true" size={15} /></Link>
           <button className="menu-toggle" type="button" aria-label={open ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
         </div>
       </nav>
-      <div className={`mobile-nav ${open ? 'is-open' : ''}`} aria-hidden={!open}>{navItems.map((item) => navLink(item, true))}<Link to="/app" className="mobile-portal" onClick={() => setOpen(false)}>Open CTMS portal <ArrowUpRight size={16} /></Link></div>
+      <div className={`mobile-nav ${open ? 'is-open' : ''}`} aria-hidden={!open}>{navItems.map((item) => navLink(item, true))}<Link to="/login" className="mobile-portal" onClick={() => setOpen(false)}>Open CTMS portal <ArrowUpRight size={16} /></Link></div>
     </header>
   );
 }
