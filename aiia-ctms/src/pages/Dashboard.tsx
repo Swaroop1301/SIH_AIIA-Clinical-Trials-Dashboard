@@ -4,10 +4,12 @@ import {
   Building2,
   FileCheck,
 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import KPICard from '@/components/dashboard/KPICard';
 import ActivityFeed from '@/components/dashboard/ActivityFeed';
 import UpcomingDeadlines from '@/components/dashboard/UpcomingDeadlines';
-import { kpiData } from '@/data/mockData';
+import { kpiData as initialKpiData } from '@/data/mockData';
+import { api } from '@/services/api';
 
 const kpiConfig = [
   { icon: FlaskConical, color: '#1b2f5b', bg: '#f0f4f8', navigateTo: '/app/trials' },
@@ -40,6 +42,27 @@ const officials = [
 ];
 
 export default function Dashboard() {
+  const [metrics, setMetrics] = useState(initialKpiData);
+
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        const response = await api.get('/dashboard/overview');
+        const data = response.data;
+        
+        setMetrics([
+          { label: 'Active Projects', value: data.total_trials, trend: 5, trendDirection: 'up' },
+          { label: 'Participants', value: data.total_participants, trend: 12, trendDirection: 'up' },
+          { label: 'Active Sites', value: data.active_sites, trend: 2, trendDirection: 'up' },
+          { label: 'Pending Reviews', value: data.pending_approvals, trend: 1, trendDirection: 'down' },
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch dashboard metrics:', error);
+      }
+    }
+    fetchDashboard();
+  }, []);
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Leadership Section */}
@@ -77,7 +100,7 @@ export default function Dashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {kpiData.map((kpi, index) => (
+        {metrics.map((kpi, index) => (
           <KPICard
             key={kpi.label}
             label={kpi.label}
