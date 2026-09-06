@@ -1,20 +1,30 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from app.api.routes import auth, trials, participants, dashboard
 from app.database import engine, Base
 
 # Create database tables (For local SQLite development. Use Alembic in production)
 Base.metadata.create_all(bind=engine)
 
+# Configure Rate Limiter
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI(title="AIIA Clinical Trials Dashboard API")
 
-# Setup CORS
+# Add slowapi exception handler
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Setup CORS - Enforcing stricter rules for production readiness
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict this to the frontend URL
+    allow_origins=["http://localhost:3000", "https://aiia-ctms.demo.com"], # restrict this to the frontend URL
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 # Include Routers
@@ -24,5 +34,6 @@ app.include_router(participants.router, prefix="/api/participants", tags=["parti
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 
 @app.get("/")
-def read_root():
+@limiter.limit("10/minute")
+def read_root(request: Request):
     return {"message": "Welcome to the AIIA Clinical Trials API (Hrishikesh Backend)"}

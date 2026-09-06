@@ -10,6 +10,8 @@ class RoleEnum(str, enum.Enum):
     Monitor = "Monitor"
     Ethics = "Ethics"
     Regulatory = "Regulatory"
+    DataManager = "DataManager"
+    Auditor = "Auditor"
 
 class User(Base):
     __tablename__ = "users"
