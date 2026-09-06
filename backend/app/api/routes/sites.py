@@ -1,1 +1,10 @@
-from fastapi import APIRouter, Depends`nfrom sqlalchemy.orm import Session`nfrom app.api import deps`nfrom app.models.clinical import Site`n`nrouter = APIRouter()`n`n@router.get("/")`ndef get_sites(db: Session = Depends(deps.get_db)):`n    return db.query(Site).all()
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.api import deps
+from app.models.clinical import Site
+
+router = APIRouter()
+
+@router.get('/')
+def get_sites(db: Session = Depends(deps.get_db)):
+    return db.query(Site).all()
