@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Bell, Search, User, ChevronRight, LogOut, Settings, ChevronDown, X } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { trials, sites, recentActivity } from '@/data/mockData';
+import { api } from '@/services/api';
 
 const breadcrumbMap: Record<string, string> = {
   '/app': 'Dashboard',
@@ -25,19 +26,32 @@ const notifications = [
 ];
 
 export default function Topbar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const pathSegments = location.pathname.split('/').filter(Boolean);
-
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [readNotifs, setReadNotifs] = useState<Set<number>>(new Set());
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   const searchRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await api.get('/auth/me');
+        setCurrentUser(response.data);
+      } catch (e) {
+        console.error('Failed to fetch user', e);
+      }
+    }
+    fetchUser();
+  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -235,15 +249,15 @@ export default function Topbar() {
               onClick={() => { setUserOpen(!userOpen); setNotifOpen(false); }}
               className="flex items-center gap-2.5 hover:bg-gray-50 rounded-lg px-2 py-1.5 transition-colors"
             >
-              <div className="w-8 h-8 rounded-full bg-navy-900 flex items-center justify-center">
-                <User className="w-4 h-4 text-white" strokeWidth={1.8} />
+              <div className="w-8 h-8 rounded-full bg-navy-900 flex items-center justify-center text-white font-medium">
+                {currentUser?.email?.charAt(0).toUpperCase() || <User className="w-4 h-4 text-white" strokeWidth={1.8} />}
               </div>
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-medium text-gray-900 leading-tight">
-                  Swaroop
+                <p className="text-sm font-medium text-gray-900 leading-tight max-w-[120px] truncate">
+                  {currentUser?.email?.split('@')[0] || 'User'}
                 </p>
                 <p className="text-[11px] text-gray-400 leading-tight">
-                  Admin
+                  {currentUser?.role || 'Guest'}
                 </p>
               </div>
               <ChevronDown className="w-3.5 h-3.5 text-gray-400 hidden sm:block" />
@@ -252,9 +266,9 @@ export default function Topbar() {
             {userOpen && (
               <div className="absolute right-0 top-full mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden z-50">
                 <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-900">Swaroop</p>
-                  <p className="text-xs text-gray-400">swaroop@aiia.gov.in</p>
-                  <p className="text-xs text-navy-700 font-medium mt-1">Role: Admin</p>
+                  <p className="text-sm font-semibold text-gray-900 truncate">{currentUser?.email?.split('@')[0] || 'User'}</p>
+                  <p className="text-xs text-gray-400 truncate">{currentUser?.email || 'Not logged in'}</p>
+                  <p className="text-xs text-navy-700 font-medium mt-1">Role: {currentUser?.role || 'Guest'}</p>
                 </div>
                 <div className="py-1">
                   <button
@@ -274,7 +288,10 @@ export default function Topbar() {
                 </div>
                 <div className="border-t border-gray-100 py-1">
                   <button
-                    onClick={() => { setUserOpen(false); }}
+                    onClick={() => {
+                      localStorage.removeItem('token');
+                      navigate('/login');
+                    }}
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-crimson-600 hover:bg-crimson-50 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />

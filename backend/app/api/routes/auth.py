@@ -78,3 +78,7 @@ def register_user(user_in: UserCreate, db: Session = Depends(deps.get_db)):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+@router.get("/me", response_model=UserResponse)
+def read_users_me(current_user: User = Depends(deps.get_current_user)):
+    return current_user
