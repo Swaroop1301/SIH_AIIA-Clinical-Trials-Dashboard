@@ -6,10 +6,11 @@ import Trials from '@/pages/Trials';
 import TrialDetail from '@/pages/TrialDetail';
 import Sites from '@/pages/Sites';
 import SiteDetail from '@/pages/SiteDetail';
+import Participants from '@/pages/Participants';
+import ParticipantDetail from '@/pages/ParticipantDetail';
+import Visits from '@/pages/Visits';
+import AdverseEvents from '@/pages/AdverseEvents';
 import {
-  Participants,
-  Visits,
-  AdverseEvents,
   Ethics,
   Documents,
   AuditTrail,
@@ -33,6 +34,7 @@ function App() {
           <Route path="sites" element={<Sites />} />
           <Route path="sites/:id" element={<SiteDetail />} />
           <Route path="participants" element={<Participants />} />
+          <Route path="participants/:id" element={<ParticipantDetail />} />
           <Route path="visits" element={<Visits />} />
           <Route path="adverse-events" element={<AdverseEvents />} />
           <Route path="ethics" element={<Ethics />} />

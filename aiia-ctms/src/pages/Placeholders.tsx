@@ -44,39 +44,6 @@ function PlaceholderPage({ title, description, icon: Icon, owner }: PlaceholderP
   );
 }
 
-export function Participants() {
-  return (
-    <PlaceholderPage
-      title="Participant Management"
-      description="Manage enrolled participants, profiles, and timelines"
-      icon={Users}
-      owner="Vedika Sakharkar (Clinical Workflow Frontend Developer)"
-    />
-  );
-}
-
-export function Visits() {
-  return (
-    <PlaceholderPage
-      title="Visit Management"
-      description="Calendar, list, and per-participant visit views"
-      icon={Calendar}
-      owner="Vedika Sakharkar (Clinical Workflow Frontend Developer)"
-    />
-  );
-}
-
-export function AdverseEvents() {
-  return (
-    <PlaceholderPage
-      title="Adverse Events"
-      description="Report and track adverse events and pharmacovigilance"
-      icon={AlertTriangle}
-      owner="Aryan (API + Frontend Integration Lead) & Vedika"
-    />
-  );
-}
-
 export function Ethics() {
   return (
     <PlaceholderPage
