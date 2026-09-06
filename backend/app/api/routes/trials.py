@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.api import deps
 from app.models.clinical import Trial
@@ -11,6 +11,13 @@ router = APIRouter()
 def get_trials(db: Session = Depends(deps.get_db), current_user = Depends(deps.get_current_user)):
     trials = db.query(Trial).all()
     return trials
+
+@router.get("/{id}", response_model=TrialResponse)
+def get_trial(id: int, db: Session = Depends(deps.get_db), current_user = Depends(deps.get_current_user)):
+    trial = db.query(Trial).filter(Trial.id == id).first()
+    if not trial:
+        raise HTTPException(status_code=404, detail="Trial not found")
+    return trial
 
 @router.post("/", response_model=TrialResponse)
 def create_trial(trial_in: TrialBase, db: Session = Depends(deps.get_db), current_user = Depends(deps.get_current_user)):
